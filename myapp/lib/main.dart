@@ -40,21 +40,56 @@ class HomePage extends StatelessWidget {
         title: const Text('Première appli'),
       ),
       body: Center(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
-          child: Row(
-            children: [
-              const Text('Hello World'),
-            ],
-          ),
+        child: Column(
+          children: const [
+            TheAmazingRow(
+              icon: Icons.cloud,
+              label: "Cheikh",
+            ),
+            SizedBox(height: 16),
+            TheAmazingRow(),
+            SizedBox(height: 16),
+            TheAmazingRow(),
+          ],
         ),
+      ),
+    );
+  }
+}
+
+class TheAmazingRow extends StatelessWidget {
+  const TheAmazingRow({
+    Key key,
+    this.icon,
+    this.label,
+  });
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width / 25,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 12,
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.wb_sunny),
+          const SizedBox(width: 18),
+          Expanded(child: const Text('Hello World')),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () => print('Hallo Welt'),
+          ),
+        ],
       ),
     );
   }
