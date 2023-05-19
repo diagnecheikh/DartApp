@@ -28,10 +28,26 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class Pokemon {
+  const Pokemon(
+    this.name,
+    this.icon,
+  );
+  final String name;
+  final IconData icon;
+}
+
 class HomePage extends StatelessWidget {
   const HomePage({
     Key key,
   }) : super(key: key);
+
+  final List<Pokemon> pokemons = const [
+    Pokemon('Pikachu', Icons.ac_unit),
+    Pokemon('Bulbizarre', Icons.wb_sunny),
+    Pokemon('Salamèche', Icons.whatshot),
+    Pokemon('Carapuce', Icons.remove_red_eye),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +59,19 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: const [
             TheAmazingRow(
-              icon: Icons.cloud,
-              label: "Cheikh",
+              Icons.cloud,
+              "Hello world",
             ),
             SizedBox(height: 16),
-            TheAmazingRow(),
+            TheAmazingRow(
+              Icons.wb_sunny,
+              "Hola desde un mundo lejano",
+            ),
             SizedBox(height: 16),
-            TheAmazingRow(),
+            TheAmazingRow(
+              Icons.line_weight,
+              "Hallo aus einer fernen Welt",
+            ),
           ],
         ),
       ),
@@ -58,11 +80,10 @@ class HomePage extends StatelessWidget {
 }
 
 class TheAmazingRow extends StatelessWidget {
-  const TheAmazingRow({
-    Key key,
+  const TheAmazingRow(
     this.icon,
     this.label,
-  });
+  );
   final IconData icon;
   final String label;
 
@@ -82,9 +103,9 @@ class TheAmazingRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.wb_sunny),
+          Icon(icon),
           const SizedBox(width: 18),
-          Expanded(child: const Text('Hello World')),
+          Expanded(child: Text(label)),
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () => print('Hallo Welt'),
