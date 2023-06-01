@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -27,15 +25,6 @@ class MyApp extends StatelessWidget {
       home: const HomePage(),
     );
   }
-}
-
-class Pokemon {
-  const Pokemon(
-    this.name,
-    this.icon,
-  );
-  final String name;
-  final IconData icon;
 }
 
 class HomePage extends StatefulWidget {
@@ -105,17 +94,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                       return;
-                    } else if (nameToAdd == nameToAdd.trim()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content:
-                              Text('Le nom ne doit pas contenir d\'espace'),
-                        ),
-                      );
-                      return;
                     }
-                    //else (pokemons.contains(element))
-
+                    // LE MOT NE DOIT PAS ETRE DANS LA LISTE
                     setState(() {
                       pokemons.add(
                         Pokemon(
@@ -132,23 +112,41 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 30),
             for (final Pokemon item in pokemons)
               TheAmazingRow(
-                item.icon,
-                item.name,
+                label: item.name,
+                icon: item.illustration,
+                onDeleted: onPokemonDeleted,
               ),
           ],
         ),
       ),
     );
   }
+
+  void onPokemonDeleted(String name) {
+    pokemons.removeWhere((element) => element.name == name);
+    setState(() {});
+  }
+}
+
+class Pokemon {
+  const Pokemon(
+    this.name,
+    this.illustration,
+  );
+  final String name;
+  final IconData illustration;
 }
 
 class TheAmazingRow extends StatelessWidget {
-  const TheAmazingRow(
+  const TheAmazingRow({
+    key,
     this.icon,
     this.label,
-  );
+    this.onDeleted,
+  }) : super(key: key);
   final IconData icon;
   final String label;
+  final Function(String) onDeleted;
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +169,7 @@ class TheAmazingRow extends StatelessWidget {
           Expanded(child: Text(label)),
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () => print('Hallo Welt'),
+            onPressed: () => onDeleted(label),
           ),
         ],
       ),
