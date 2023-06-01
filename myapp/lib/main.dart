@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() => runApp(
       MyApp(),
@@ -37,12 +38,34 @@ class Pokemon {
   final IconData icon;
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({
     Key key,
   }) : super(key: key);
 
-  final List<Pokemon> pokemons = const [
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // TextEditingController valeurTextFiledController = TextEditingController();
+  TextEditingController mycontroller;
+
+  get suffixIcon => null;
+
+  @override
+  void initState() {
+    mycontroller = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    mycontroller.dispose();
+    super.dispose();
+  }
+
+  final pokemons = <Pokemon>[
     Pokemon('Pikachu', Icons.ac_unit),
     Pokemon('Bulbizarre', Icons.wb_sunny),
     Pokemon('Salamèche', Icons.whatshot),
@@ -53,25 +76,65 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Première appli'),
+        title: const Text('Hola Mundo'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          children: const [
-            TheAmazingRow(
-              Icons.cloud,
-              "Hello world",
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(width: 50),
+                Expanded(
+                  child: TextField(
+                    controller: mycontroller,
+                    decoration: InputDecoration(
+                      labelText: 'Ecriver un nom',
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    final String nameToAdd = mycontroller.text;
+                    if (nameToAdd.length < 3) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Le nom doit contenir au moins 3 caractères'),
+                        ),
+                      );
+                      return;
+                    } else if (nameToAdd == nameToAdd.trim()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:
+                              Text('Le nom ne doit pas contenir d\'espace'),
+                        ),
+                      );
+                      return;
+                    }
+                    //else (pokemons.contains(element))
+
+                    setState(() {
+                      pokemons.add(
+                        Pokemon(
+                          nameToAdd,
+                          Icons.star,
+                        ),
+                      );
+                      mycontroller.clear();
+                    });
+                  },
+                ),
+              ],
             ),
-            SizedBox(height: 16),
-            TheAmazingRow(
-              Icons.wb_sunny,
-              "Hola desde un mundo lejano",
-            ),
-            SizedBox(height: 16),
-            TheAmazingRow(
-              Icons.line_weight,
-              "Hallo aus einer fernen Welt",
-            ),
+            SizedBox(height: 30),
+            for (final Pokemon item in pokemons)
+              TheAmazingRow(
+                item.icon,
+                item.name,
+              ),
           ],
         ),
       ),
